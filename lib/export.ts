@@ -54,7 +54,6 @@ export async function buildWorkbook(monthKey?: string) {
   sheet.mergeCells(1, 1, 2, 1);
   sheet.mergeCells(1, 2, 2, 2);
   sheet.mergeCells(1, 3, 2, 3);
-  sheet.mergeCells(1, 4, 1, 3 + report.month.dates.length);
   sheet.mergeCells(1, 4 + report.month.dates.length, 2, 4 + report.month.dates.length);
   sheet.mergeCells(1, 5 + report.month.dates.length, 2, 5 + report.month.dates.length);
   sheet.mergeCells(1, 6 + report.month.dates.length, 2, 6 + report.month.dates.length);
