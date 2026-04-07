@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum EntryType {
+  NORMAL
+  LEAVE
+  BHF
+}
+
+model Employee {
+  id         String               @id @default(cuid())
+  empId      String               @unique
+  name       String
+  department String?
+  isActive   Boolean              @default(true)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  monthlyRecords MonthlyRecord[]
+}
+
+model MonthlyRecord {
+  id            String           @id @default(cuid())
+  employeeId     String
+  monthKey       String
+  totalWorkingDays Int            @default(0)
+  leaveDays      Int              @default(0)
+  downtimeMin    Int              @default(0)
+  processQuality String           @default("")
+  crossTraining  String           @default("")
+  notes          String           @default("")
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  employee       Employee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  entries        DailyEntry[]
+
+  @@unique([employeeId, monthKey])
+  @@index([monthKey])
+}
+
+model DailyEntry {
+  id            String        @id @default(cuid())
+  monthlyRecordId String
+  entryDate     DateTime
+  productivity  Int           @default(0)
+  entryType     EntryType     @default(NORMAL)
+  note          String        @default("")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  monthlyRecord MonthlyRecord  @relation(fields: [monthlyRecordId], references: [id], onDelete: Cascade)
+
+  @@unique([monthlyRecordId, entryDate])
+  @@index([entryDate])
+}
