@@ -1,6 +1,5 @@
 import ExcelJS from 'exceljs';
 import { ENTRY_TYPES } from './entry-types';
-import type { EntryType } from './entry-types';
 import { getMonthReport } from './report';
 
 type WorkbookEmployee = Awaited<ReturnType<typeof getMonthReport>>['employees'][number];
